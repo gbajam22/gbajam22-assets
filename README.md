@@ -6,7 +6,7 @@ To learn more, see the [itch.io](https://itch.io/jam/gbajam22) page.
 
 ## Teaser Cart
 
-A teaser cart (made with Butano) can be found in /cart folder.
+Source code for the teaser cart (made with [Butano](https://github.com/GValiente/butano)) can be found in /cart folder. And you can download the cart rom [here](https://github.com/gbajam22/gbajam22.github.io/releases/download/cart/cart.gba)
 
 ## Vector Logo
 
