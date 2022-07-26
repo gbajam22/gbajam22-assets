@@ -1,0 +1,1 @@
+Note that the background in this logo requires attribution and is made by [Ben 3D](https://www.youtube.com/watch?v=xaeIuEY-jNo).
