@@ -20,7 +20,10 @@ Source code for the teaser cart (made with [Butano](https://github.com/GValiente
 
 ## 240x160
 
-![](assets/240x160.png)
+Perfectly sized and transparent for your gba!
+
+![](assets/240x160_transparent_snap.png)
+
 
 ## 630x500
 
@@ -29,3 +32,8 @@ Source code for the teaser cart (made with [Butano](https://github.com/GValiente
 ## 2000x250
 
 ![](assets/2000x250.png)
+
+## Credits
+
++ The pixel font included in the cart comes from the awesome [BPCore-Engine](https://github.com/evanbowman/BPCore-Engine) (A GBA game engine that uses Lua).
++ One of the older logo variations uses a background from [Ben 3D](https://www.youtube.com/watch?v=xaeIuEY-jNo).
