@@ -14,7 +14,10 @@ Source code for the teaser cart (made with [Butano](https://github.com/GValiente
 
 ## 240x160
 
-![](assets/240x160.png)
+Perfectly sized and transparent for your gba!
+
+![](assets/240x160_transparent_snap.png)
+
 
 ## 630x500
 
