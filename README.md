@@ -35,5 +35,7 @@ Perfectly sized and transparent for your gba!
 
 ## Credits
 
++ The font for Jam | 2022 is [Montserrat](https://github.com/JulietaUla/Montserrat) and is available under the [Open Font License](https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)
 + The pixel font included in the cart comes from the awesome [BPCore-Engine](https://github.com/evanbowman/BPCore-Engine) (A GBA game engine that uses Lua).
-+ One of the older logo variations uses a background from [Ben 3D](https://www.youtube.com/watch?v=xaeIuEY-jNo).
++ One of the older logo variations uses a background that requires attribution from [Ben 3D](https://www.youtube.com/watch?v=xaeIuEY-jNo).
++ The A icon and the mode7 background (from the rom) are free use and licensed as [public domain (CC0))](https://creativecommons.org/share-your-work/public-domain/cc0/).
