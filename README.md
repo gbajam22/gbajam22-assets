@@ -39,3 +39,4 @@ Perfectly sized and transparent for your gba!
 + The pixel font included in the cart comes from the awesome [BPCore-Engine](https://github.com/evanbowman/BPCore-Engine) (A GBA game engine that uses Lua).
 + One of the older logo variations uses a background that requires attribution from [Ben 3D](https://www.youtube.com/watch?v=xaeIuEY-jNo).
 + The A icon and the mode7 background (from the rom) are free use and licensed as [public domain (CC0))](https://creativecommons.org/share-your-work/public-domain/cc0/).
++ Cart music is *what is funk?*, from *Jester*, licensed under the [Attribution Non-commercial Share Alike license (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).
