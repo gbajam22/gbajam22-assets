@@ -177,8 +177,31 @@ int main()
 
     bool showExtra = false;
 
+    const char* scrolltext = "                ** GBADEV.NET INVITES YOU TO COME JOIN THE 2022 JAM * RUNNING FROM 1ST AUGUST UNTIL 1ST NOVEMBER * HTTPS://ITCH.IO/JAM/322692 * IMPRESS FAMILY AND FRIENDS * FABULOUS PRIZES TO BE WON **";
+    int scrolltextpos = 0;
+    bn::vector<bn::sprite_ptr, 32> scroller;
+    scroller.clear();
+    for(int scrollchars = 0; scrollchars < 32; scrollchars++)
+    {
+        int scrollchar = (int)scrolltext[scrollchars] - (int)' ';
+        scroller.push_back(bn::sprite_items::font.create_sprite(120 + (8*scrollchars), 68, scrollchar));
+        scrolltextpos++;
+    }
+
     while(true)
     {
+        for(int scrollchars = 0; scrollchars < 32; scrollchars++)
+        {
+            scroller[scrollchars].set_x(scroller[scrollchars].x() - 1);
+        }
+        if(scroller[0].x() < -128)
+        {
+            int scrollchar = (int)scrolltext[scrolltextpos] - (int)' ';
+            scroller.erase(scroller.begin());
+            scroller.push_back(bn::sprite_items::font.create_sprite(128, 68, scrollchar));
+            scrolltextpos = (scrolltextpos + 1) % 201; // strlen(scrolltext);
+        }
+
         // switch between logo and itch link on any key
         if(bn::keypad::any_pressed()){
             if(showExtra){
@@ -205,7 +228,8 @@ int main()
         }
 
         // move start button
-        start.set_y(56 + y_pos/5);
+        //start.set_y(56 + y_pos/5);
+        start.set_y(46 + y_pos/5);
         y_pos+=d * bn::fixed(0.5);
         if(y_pos > 10 || y_pos < -10){
             d = d * - 1;
