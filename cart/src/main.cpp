@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "bn_core.h"
 #include "bn_math.h"
 #include "bn_keypad.h"
@@ -184,7 +186,9 @@ int main()
     bn::fixed y_pos = 0;
     int d = 1;
 
-    const char* scrolltext = "                ** GBADEV.NET INVITES YOU TO COME JOIN THE 2022 JAM * RUNNING FROM 1ST AUGUST UNTIL 1ST NOVEMBER * HTTPS://ITCH.IO/JAM/322692 * IMPRESS FAMILY AND FRIENDS * FABULOUS PRIZES TO BE WON **";
+    const char scrolltext[] = "                ** GBADEV.NET INVITES YOU TO COME JOIN THE 2022 JAM * RUNNING FROM 1ST AUGUST UNTIL 1ST NOVEMBER * https://itch.io/jam/gbajam22 * IMPRESS FAMILY AND FRIENDS * FABULOUS PRIZES TO BE WON **";
+    const int scrolltext_len = sizeof(scrolltext)-1;
+    
     int scrolltextpos = 0;
     bn::vector<bn::sprite_ptr, 32> scroller;
     scroller.clear();
@@ -194,6 +198,11 @@ int main()
         scroller.push_back(bn::sprite_items::font.create_sprite(120 + (8*scrollchars), 68, scrollchar));
         scrolltextpos++;
     }
+    
+    const char music_credit[] = "music: jester - what is funk?";
+    const int music_credit_len = sizeof(music_credit)-1;
+    bn::vector<bn::sprite_ptr, 32> music_credit_sprites;
+    int music_credit_timer = 0;
 
     while(true)
     {
@@ -208,11 +217,18 @@ int main()
                 int scrollchar = (int)scrolltext[scrolltextpos] - (int)' ';
                 scroller.erase(scroller.begin());
                 scroller.push_back(bn::sprite_items::font.create_sprite(128, 68, scrollchar));
-                scrolltextpos = (scrolltextpos + 1) % 201; // strlen(scrolltext);
+                scrolltextpos = (scrolltextpos + 1) % scrolltext_len;
+            }
+            
+            music_credit_timer += 1;
+            
+            for(int i = 0; i < music_credit_len; i++)
+            {
+                music_credit_sprites[i].set_y(std::min(-88 - i*4 + music_credit_timer, -68));
             }
         }
 
-        // switch between logo and itch link on any key
+        // Start the invtro when any key is pressed.
         if(bn::keypad::any_pressed()){
             if(!started){
                 started = true;
@@ -225,10 +241,17 @@ int main()
                 extra.push_back(bn::sprite_items::extra.create_sprite(0,0,2));
                 extra.push_back(bn::sprite_items::extra.create_sprite(32,0,3));
                 extra.push_back(bn::sprite_items::extra.create_sprite(64,0,4));
+                
+                for(int i = 0; i < music_credit_len; i++)
+                {
+                    int c = (int)music_credit[i] - (int)' ';
+                    music_credit_sprites.push_back(bn::sprite_items::font.create_sprite(-100 + (7*i), -88, c));
+                }
+                
                 bn::music_items::what_is_funk.play(1.0);
             } else {
                 
-                // Forbid switching back due to running out of VRAM...
+                // Forbid switching back due to some leak...
                 
                 // extra.clear();
                 // start.set_visible(true);
