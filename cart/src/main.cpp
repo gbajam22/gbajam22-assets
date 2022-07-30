@@ -10,7 +10,6 @@
 #include "bn_affine_bg_pc_register_hbe_ptr.h"
 #include "bn_affine_bg_dx_register_hbe_ptr.h"
 #include "bn_affine_bg_dy_register_hbe_ptr.h"
-
 #include "bn_blending_transparency_attributes.h"
 #include "bn_blending_transparency_attributes_hbe_ptr.h"
 
@@ -19,11 +18,14 @@
 #include "bn_sprite_items_logo.h"
 #include "bn_sprite_items_start.h"
 #include "bn_sprite_items_extra.h"
+#include "bn_music_items.h"
 
 #include "fixed_8x8_sprite_font.h"
 
 namespace
 {
+    bool started = false;
+    
     struct camera
     {
         bn::fixed x = 32;
@@ -31,19 +33,26 @@ namespace
         bn::fixed z = 0;
         int phi = 0;
         int cos = 0;
-        int sin =20;
+        int sin = 20;
         unsigned int t = 0;
+        bn::fixed forward_speed = bn::fixed::from_data(32);
     };
-    
 
     void update_camera(camera& camera)
     {
         bn::fixed dir_x = 0;
         bn::fixed dir_z = 0;
 
-        camera.t += 1;
-
-        dir_z -= bn::fixed::from_data(32);
+        if (started)
+        {
+            camera.t += 1;
+            if (camera.forward_speed < bn::fixed::from_data(128))
+            {
+                camera.forward_speed += bn::fixed::from_data(1);
+            }
+        }
+        
+        dir_z -= camera.forward_speed / 4;
 
         camera.cos = bn::lut_cos(camera.phi).data() >> 4;
         camera.sin = bn::lut_sin(camera.phi).data() >> 4;
@@ -175,8 +184,6 @@ int main()
     bn::fixed y_pos = 0;
     int d = 1;
 
-    bool showExtra = false;
-
     const char* scrolltext = "                ** GBADEV.NET INVITES YOU TO COME JOIN THE 2022 JAM * RUNNING FROM 1ST AUGUST UNTIL 1ST NOVEMBER * HTTPS://ITCH.IO/JAM/322692 * IMPRESS FAMILY AND FRIENDS * FABULOUS PRIZES TO BE WON **";
     int scrolltextpos = 0;
     bn::vector<bn::sprite_ptr, 32> scroller;
@@ -190,30 +197,25 @@ int main()
 
     while(true)
     {
-        for(int scrollchars = 0; scrollchars < 32; scrollchars++)
+        if (started)
         {
-            scroller[scrollchars].set_x(scroller[scrollchars].x() - 1);
-        }
-        if(scroller[0].x() < -128)
-        {
-            int scrollchar = (int)scrolltext[scrolltextpos] - (int)' ';
-            scroller.erase(scroller.begin());
-            scroller.push_back(bn::sprite_items::font.create_sprite(128, 68, scrollchar));
-            scrolltextpos = (scrolltextpos + 1) % 201; // strlen(scrolltext);
+            for(int scrollchars = 0; scrollchars < 32; scrollchars++)
+            {
+                scroller[scrollchars].set_x(scroller[scrollchars].x() - 1);
+            }
+            if(scroller[0].x() < -128)
+            {
+                int scrollchar = (int)scrolltext[scrolltextpos] - (int)' ';
+                scroller.erase(scroller.begin());
+                scroller.push_back(bn::sprite_items::font.create_sprite(128, 68, scrollchar));
+                scrolltextpos = (scrolltextpos + 1) % 201; // strlen(scrolltext);
+            }
         }
 
         // switch between logo and itch link on any key
         if(bn::keypad::any_pressed()){
-            if(showExtra){
-                extra.clear();
-                start.set_visible(true);
-                logo_parts.push_back(logo.create_sprite(-64,-32-16,0));
-                logo_parts.push_back(logo.create_sprite(0, -32-16,1));
-                logo_parts.push_back(logo.create_sprite(64, -32-16,2));
-                logo_parts.push_back(logo.create_sprite(-64, 32-16,3));
-                logo_parts.push_back(logo.create_sprite(0, 32-16,4));
-                logo_parts.push_back(logo.create_sprite(64, 32-16,5));
-            } else {
+            if(!started){
+                started = true;
                 start.set_item(bn::sprite_items::start, 1);
                 bn::core::update();
                 start.set_visible(false);
@@ -223,8 +225,20 @@ int main()
                 extra.push_back(bn::sprite_items::extra.create_sprite(0,0,2));
                 extra.push_back(bn::sprite_items::extra.create_sprite(32,0,3));
                 extra.push_back(bn::sprite_items::extra.create_sprite(64,0,4));
+                bn::music_items::what_is_funk.play(1.0);
+            } else {
+                
+                // Forbid switching back due to running out of VRAM...
+                
+                // extra.clear();
+                // start.set_visible(true);
+                // logo_parts.push_back(logo.create_sprite(-64,-32-16,0));
+                // logo_parts.push_back(logo.create_sprite(0, -32-16,1));
+                // logo_parts.push_back(logo.create_sprite(64, -32-16,2));
+                // logo_parts.push_back(logo.create_sprite(-64, 32-16,3));
+                // logo_parts.push_back(logo.create_sprite(0, 32-16,4));
+                // logo_parts.push_back(logo.create_sprite(64, 32-16,5));
             }
-            showExtra = !showExtra;
         }
 
         // move start button
